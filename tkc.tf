@@ -30,7 +30,7 @@ resource "kubernetes_cluster_role_binding" "rbac" {
   subject {
     kind = "ServiceAccount"
     name = "default"
-    namespace = "cyan"
+    namespace = kubernetes_namespace.cyan.metadata[0].name
   }
   role_ref {
     api_group = "rbac.authorization.k8s.io"
@@ -57,7 +57,7 @@ resource "kubernetes_config_map" "ws-config" {
   ]
   metadata {
     name = "ws-conf-file"
-    namespace = "cyan"
+    namespace = kubernetes_namespace.cyan.metadata[0].name
   }
   data = {
     "ws.conf" = <<EOF
@@ -89,7 +89,7 @@ resource "kubernetes_config_map" "ws-index" {
   ]
   metadata {
     name = "ws-index-file"
-    namespace = "cyan"
+    namespace = kubernetes_namespace.cyan.metadata[0].name
   }
   data = {
     "index.html" = <<EOF
@@ -186,7 +186,7 @@ resource "kubernetes_deployment" "webservers" {
   ]
   metadata {
     name = "webserver"
-    namespace = "cyan"
+    namespace = kubernetes_namespace.cyan.metadata[0].name
   }
   spec {
     selector {
@@ -253,7 +253,7 @@ resource "kubernetes_service" "webserverSvc" {
   ]
   metadata {
     name = "webserver-svc"
-    namespace = "cyan"
+    namespace = kubernetes_namespace.cyan.metadata[0].name
   }
   spec {
     selector = {
@@ -277,7 +277,7 @@ resource "kubernetes_ingress" "tkcIngress" {
   ]
   metadata {
     name = "ingress-resource"
-    namespace = "cyan"
+    namespace = kubernetes_namespace.cyan.metadata[0].name
     annotations = {
       "kubernetes.io/ingress.class" = "a10-ext"
       "acos.a10networks.com/health-monitors" = "[{\"name\":\"ws-mon\", \"port\":\"80\",\"type\":\"http\"}]"
